@@ -1,0 +1,47 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - DevBranch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        ref: DevBranch
+
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.x'
+
+    - name: Build project
+      run: dotnet build --configuration Release
+
+    - name: Run tests
+      run: dotnet test --configuration Release
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        ref: DevBranch
+
+    - name: Deploy to Synapse
+      run: |
+        # Add deployment commands here
+        echo "Deploying Synapse artifacts from DevBranch to Main branch"
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git checkout Main
+        git merge DevBranch
+        git push origin Main
