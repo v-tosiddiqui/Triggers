@@ -1,0 +1,25 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - DevBranch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        ref: DevBranch
+
+    - name: Deploy to Synapse
+      run: |
+        echo "Deploying Synapse artifacts from DevBranch to Main branch"
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "v-tosiddiqui@microsoft.com"
+        git checkout Main
+        git merge DevBranch
+        git push origin Main
