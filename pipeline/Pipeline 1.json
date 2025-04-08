@@ -25,7 +25,7 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "select getdate();"
+							"text": "select @@version ;"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
